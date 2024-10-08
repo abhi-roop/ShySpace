@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
         <head>
           <title>{metadata.title}</title>
           <meta name="description" content={metadata.description} />
-          <link rel="icon" href="/favicon.ico" /> {/* Updated favicon link */}
+        
         </head>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
