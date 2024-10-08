@@ -6,6 +6,7 @@ import { MathUtils, Color, Vector3 } from "three";
 import { useDrag } from "@use-gesture/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import Head from 'next/head';
 
 // Rotating Rubik's Cube component
 function RotatingCube() {
