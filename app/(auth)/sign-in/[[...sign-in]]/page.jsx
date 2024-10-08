@@ -174,9 +174,7 @@ export default function Component() {
           </aside>
         )}
         <div className="flex-1 p-8 flex flex-col justify-center">
-         <SignInButton fallbackRedirectUrl="/dashboard">
-        Sign in
-      </SignInButton>
+          <SignIn fallbackRedirectUrl="/dashboard" /> {/* Updated redirect prop */}
         </div>
       </div>
     </section>
