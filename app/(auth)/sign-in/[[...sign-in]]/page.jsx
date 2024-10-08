@@ -1,14 +1,13 @@
 'use client';
 
-import { SignIn, useSignIn } from '@clerk/nextjs'; // Import useSignIn
+import { SignIn, useSignIn } from '@clerk/nextjs';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useEffect, useRef, useState } from 'react';
 import { Euler, MathUtils, Vector3 } from 'three';
 import { PerspectiveCamera, Environment, RoundedBox } from '@react-three/drei';
-import { useRouter } from 'next/navigation'; // Import useRouter
-import { useDrag } from '@use-gesture/react'; // Import useDrag
+import { useRouter } from 'next/navigation';
+import { useDrag } from '@use-gesture/react';
 
-// Define an improved color palette for a metallic look
 const COLORS = ['#0A0A0A']; // Metallic Black
 
 function RubiksCube() {
@@ -40,7 +39,7 @@ function RubiksCube() {
   }, []);
 
   useFrame((state, delta) => {
-    const speedMultiplier = isHovered ? 2 : 1; // Increase speed on hover
+    const speedMultiplier = isHovered ? 2 : 1;
 
     setGlobalRotation((prev) => new Euler(
       prev.x + delta * 0.2 * speedMultiplier,
@@ -86,7 +85,7 @@ function RubiksCube() {
       onPointerOut={() => setIsHovered(false)}
       scale={[0.8, 0.8, 0.8]}
       {...bind()}
-      style={{ cursor: 'pointer' }} // Add cursor pointer style
+      style={{ cursor: 'pointer' }}
     >
       {positions.map((x, i) =>
         positions.map((y, j) =>
@@ -135,7 +134,7 @@ function RubiksCube() {
 }
 
 export default function Component() {
-  const router = useRouter(); // Initialize useRouter
+  const router = useRouter();
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -147,13 +146,6 @@ export default function Component() {
     setIsMounted(true);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  useEffect(() => {
-    // Check if the user is signed in
-    if (signIn.isSignedIn) {
-      router.push('/dashboard'); // Redirect to dashboard if signed in
-    }
-  }, [signIn.isSignedIn, router]); // Run this effect when signIn state changes
 
   const showCube = windowWidth >= 768;
 
@@ -174,7 +166,7 @@ export default function Component() {
           </aside>
         )}
         <div className="flex-1 p-8 flex flex-col justify-center">
-          <SignIn fallbackRedirectUrl="/dashboard" /> {/* Updated redirect prop */}
+          <SignIn />
         </div>
       </div>
     </section>
