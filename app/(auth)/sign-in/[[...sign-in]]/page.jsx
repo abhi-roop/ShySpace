@@ -138,7 +138,7 @@ export default function Component() {
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
   const [isMounted, setIsMounted] = useState(false);
 
-  const signIn = useSignIn(); // Use Clerk's useSignIn hook
+  const signIn = useSignIn();
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -146,6 +146,10 @@ export default function Component() {
     setIsMounted(true);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  const handleSignInSuccess = () => {
+    router.push('/dashboard'); // Redirect to /dashboard after sign-in success
+  };
 
   const showCube = windowWidth >= 768;
 
@@ -166,7 +170,7 @@ export default function Component() {
           </aside>
         )}
         <div className="flex-1 p-8 flex flex-col justify-center">
-          <SignIn />
+          <SignIn onSignInSuccess={handleSignInSuccess} />
         </div>
       </div>
     </section>

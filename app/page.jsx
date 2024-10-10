@@ -1,22 +1,17 @@
-"use client"
+"use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useRef, useMemo, useState } from "react";
 import { MathUtils, Color, Vector3 } from "three";
 import { useDrag } from "@use-gesture/react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import Head from 'next/head';
 
-// Rotating Rubik's Cube component
 function RotatingCube() {
   const groupRef = useRef();
   const cubesRef = useRef([]);
   const [hovered, setHovered] = useState(false);
-
   const { size } = useThree();
 
-  // Original cube positions
   const cubePositions = useMemo(() => {
     return Array.from({ length: 3 }).flatMap((_, x) =>
       Array.from({ length: 3 }).flatMap((_, y) =>
@@ -25,29 +20,29 @@ function RotatingCube() {
     );
   }, []);
 
-  // Colors for the cubes
-  const colors = useMemo(
-    () => [
-      "#FFD700", // Gold
-      "#C0C0C0", // Silver
-      "#000000", // Black
-    ],
-    []
-  );
+  const colors = useMemo(() => [
+    "#303030", // Dark Metallic Gray
+    "#FFD700", // Metallic Gold
+    "#4169E1", // Royal Blue Metallic
+    "#FF4500", // Metallic Orange-Red
+    "#2E8B57", // Metallic Sea Green
+    "#FF1493", // Metallic Deep Pink
+    "#9370DB", // Metallic Medium Purple
+    "#CD7F32", // Metallic Bronze
+    "#40E0D0", // Metallic Turquoise
+  ], []);
 
-  // Target positions for cube dispersal (on hover)
   const targetPositions = useMemo(() => {
     return cubePositions.map(
       () =>
         new Vector3(
-          MathUtils.randFloatSpread(8), // Increase spread distance
-          MathUtils.randFloatSpread(8),
-          MathUtils.randFloatSpread(8)
+          MathUtils.randFloatSpread(10),
+          MathUtils.randFloatSpread(10),
+          MathUtils.randFloatSpread(10)
         )
     );
   }, [cubePositions]);
 
-  // Drag event handler to rotate the cube group
   const bind = useDrag(({ offset: [x, y] }) => {
     if (groupRef.current) {
       groupRef.current.rotation.x = y / 100;
@@ -55,21 +50,18 @@ function RotatingCube() {
     }
   });
 
-  // Animate the cubes
   useFrame((state, delta) => {
     if (groupRef.current) {
       groupRef.current.rotation.x += delta * (hovered ? 1 : 0.2);
       groupRef.current.rotation.y += delta * (hovered ? 1.4 : 0.3);
     }
 
-    // Update cube positions and colors
     cubesRef.current.forEach((cube, index) => {
       if (cube) {
         const time = state.clock.getElapsedTime();
         const [x, y, z] = cubePositions[index];
         const targetPos = targetPositions[index];
 
-        // On hover, disperse the cubes further, else return to normal
         if (hovered) {
           cube.position.lerp(targetPos, 0.1);
         } else {
@@ -83,15 +75,14 @@ function RotatingCube() {
           );
         }
 
-        // Scale oscillation
         cube.scale.setScalar(
           MathUtils.lerp(0.9, 1.1, Math.sin(time * 4 + index) * 0.5 + 0.5)
         );
 
-        // Dynamically change color hue for some variation
-        const hue = (time * 50 + index * 20) % 360;
-        cube.material.color.setHSL(hue / 360, 1, 0.5);
-        cube.material.emissive.setHSL(hue / 360, 1, 0.2);
+        const baseColor = new Color(colors[index % colors.length]);
+        const shiftedColor = baseColor.offsetHSL(0, 0, Math.sin(time * 2 + index) * 0.1);
+        cube.material.color.copy(shiftedColor);
+        cube.material.emissive.copy(shiftedColor).multiplyScalar(0.2);
       }
     });
   });
@@ -109,13 +100,12 @@ function RotatingCube() {
           <boxGeometry args={[0.8, 0.8, 0.8]} />
           <meshPhysicalMaterial
             color={colors[index % colors.length]}
-            metalness={1}
+            metalness={0.9}
             roughness={0.1}
             clearcoat={1}
-            clearcoatRoughness={0.05}
+            clearcoatRoughness={0.1}
             reflectivity={1}
-            emissive={new Color(colors[index % colors.length]).multiplyScalar(0.2)}
-            toneMapped={false}
+            envMapIntensity={1.5}
           />
         </mesh>
       ))}
@@ -123,42 +113,34 @@ function RotatingCube() {
   );
 }
 
-// Main landing page component
 export default function LandingPage() {
-  const router = useRouter(); // Corrected router definition
+  const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white overflow-hidden">
-      {/* Header Section */}
+    <div className="h-screen bg-gradient-to-br from-gray-950 via-black to-gray-900 text-white overflow-auto md:overflow-hidden">
       <header className="container mx-auto px-4 py-6 flex justify-between items-center">
         <div className="flex items-center space-x-2">
-          
-          <span className="text-2xl font-bold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+          <span className="text-2xl font-bold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-blue-500">
             ShySpace
           </span>
         </div>
-        <div className="flex items-center space-x-4">
-          {/* Add any additional header elements if necessary */}
-        </div>
       </header>
-      <div className="text-center text-gray-400 text-lg">
+      <div className="text-left text-lg ml-4 bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-500 to-blue-500">
         Name Definitely not inspired from SciSpace
       </div>
 
-      {/* Main Content Section */}
-      <main className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between py-20">
-        {/* Left Section: Text Content */}
+      <main className="container mx-auto h-screen px-4 flex flex-col md:flex-row items-center justify-between">
         <div className="md:w-1/2 space-y-6">
-          <h1 className="text-4xl md:text-5xl font-extrabold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500">
-            Get Your Interview Feedback Before the Actual Interview!
+          <h1 className="text-3xl md:text-4xl font-extrabold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-400 to-blue-500">
+            Ace Your Interview: Gather Feedback Before You Go!
           </h1>
-          <p className="text-xl text-gray-400">
+          <p className="text-lg md:text-xl text-gray-300">
             Start preparing for your interview without the fear of being judged.
           </p>
 
           <button
             onClick={() => router.replace("/sign-in")}
-            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 flex items-center space-x-2 px-6 py-3 rounded-full transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50"
+            className="bg-gradient-to-r from-pink-500 to-blue-600 text-white hover:from-pink-600 hover:to-blue-700 flex items-center space-x-2 px-4 md:px-6 py-2 md:py-3 rounded-full transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
           >
             <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -170,13 +152,13 @@ export default function LandingPage() {
           </button>
         </div>
 
-        {/* Right Section: Rotating Cube */}
         <div className="md:w-1/2 mt-10 md:mt-0">
-          <div className="w-full h-96 relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 opacity-20 rounded-full filter blur-3xl animate-pulse"></div>
+          <div className="w-full h-64 md:h-96 relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-pink-500 to-blue-600 opacity-10 rounded-full filter blur-3xl animate-pulse"></div>
             <Canvas>
-              <ambientLight />
-              <pointLight position={[10, 10, 10]} />
+              <ambientLight intensity={0.3} />
+              <pointLight position={[10, 10, 10]} intensity={1.2} />
+              <spotLight position={[-10, -10, -10]} angle={0.3} penumbra={1} intensity={0.8} castShadow />
               <RotatingCube />
             </Canvas>
           </div>
