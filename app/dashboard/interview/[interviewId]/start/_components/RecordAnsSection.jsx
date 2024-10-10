@@ -45,7 +45,7 @@ function RecordAnsSection({ mockInterviewQuestion, activeQuestionIndex, intervie
             setLoading(true);
             stopSpeechToText();
     
-            if (userAnswer?.length < 10) {
+            if (userAnswer?.length <= 5) {
                 setLoading(false);
                 toast({
                     title: "Uh oh! Something went wrong.",
@@ -156,6 +156,7 @@ function RecordAnsSection({ mockInterviewQuestion, activeQuestionIndex, intervie
                 </ul>
             </div>
             <Button 
+            disabled={true}
                 onClick={() => console.log(userAnswer)} 
                 className="mt-4 py-2 px-6 text-md font-semibold transition-all duration-300 hover:scale-105 bg-green-500 text-white rounded-md"
             >
