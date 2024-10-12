@@ -118,17 +118,23 @@ export default function LandingPage() {
 
   return (
     <div className="h-screen bg-gradient-to-br from-gray-950 via-black to-gray-900 text-white overflow-auto md:overflow-hidden">
-      <header className="container mx-auto px-4 py-6 flex justify-between items-center">
+      <header className="container mx-auto px-6 py-8 flex justify-between items-center">
         <div className="flex items-center space-x-2">
-          <span className="text-2xl font-bold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-blue-500">
+          <span className="text-3xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-blue-500 hover:scale-105 transition-transform duration-300 ease-in-out">
             ShySpace
           </span>
         </div>
+        <nav className="flex space-x-6">
+          <a href="/questions" className="text-lg text-gray-300 hover:text-white transition duration-300 ease-in-out">About</a>
+          <a href="/how-it-works" className="text-lg text-gray-300 hover:text-white transition duration-300 ease-in-out">Features</a>
+          <a href="/connect" className="text-lg text-gray-300 hover:text-white transition duration-300 ease-in-out">Contact</a>
+        </nav>
       </header>
-      <div className="text-left text-lg ml-4 bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-500 to-blue-500">
+    
+      <div className="mt-8 text-left text-2xl md:text-3xl font-semibold ml-4 bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-500 to-blue-500">
         Name Definitely not inspired from SciSpace
       </div>
-
+    
       <main className="container mx-auto h-screen px-4 flex flex-col md:flex-row items-center justify-between">
         <div className="md:w-1/2 space-y-6">
           <h1 className="text-3xl md:text-4xl font-extrabold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-400 to-blue-500">
