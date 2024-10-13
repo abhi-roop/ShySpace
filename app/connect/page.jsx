@@ -70,10 +70,11 @@ function ContactPage() {
           </div>
 
           <button
+          disabled={true}
             type="submit"
             className="w-full py-3 bg-gradient-to-r from-pink-500 to-blue-600 text-white font-semibold rounded-lg hover:from-pink-600 hover:to-blue-700 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
-            Send Message
+            Working  on it
           </button>
         </form>
       </div>
